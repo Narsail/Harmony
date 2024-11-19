@@ -150,7 +150,7 @@ public final class Harmonic {
         }
     }
 
-    static func dummy() -> Harmonic {
+    public static func dummy() -> Harmonic {
         var config = Configuration()
         config.isDummy = true
         let migrator = DatabaseMigrator()

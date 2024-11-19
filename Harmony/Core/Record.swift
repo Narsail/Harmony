@@ -16,8 +16,7 @@ public protocol CloudKitDecodable: Decodable {}
 public protocol HRecord: CloudKitEncodable & CloudKitDecodable & FetchableRecord & PersistableRecord {
 
     // Required model values
-    var id: UUID { get }
-//    var isDeleted: Bool { get set }
+    var id: String { get }
 
     // CloudKit values
     var archivedRecordData: Data? { get set }
@@ -64,7 +63,7 @@ extension HRecord {
 
     public var recordID: CKRecord.ID {
         CKRecord.ID(
-            recordName: "\(Self.recordType)|\(id.uuidString)",
+            recordName: "\(Self.recordType)|\(id)",
             zoneID: zoneID
         )
     }
