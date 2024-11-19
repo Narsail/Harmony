@@ -12,8 +12,8 @@ import os.log
 
 public extension Harmonic {
 
-    func eraseDatabase() async throws {
-        try await database.erase()
+    func eraseDatabase() throws {
+        try database.erase()
     }
 
     func read<T>(_ block: (Database) throws -> T) throws -> T {
