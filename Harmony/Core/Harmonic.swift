@@ -111,10 +111,7 @@ public final class Harmonic {
                 let databasePath = try configuration.databasePath ?? Self.defaultDatabasePath
                 let databaseConfiguration = configuration.databaseConfiguration ?? Self.makeDatabaseConfiguration()
 
-                self.database = try DatabasePool(
-                    path: databasePath,
-                    configuration: databaseConfiguration
-                )
+                self.database = try Harmonic.openSharedDatabase(at: databasePath)
 
                 let initialMigrations = try self.database.read { db in
                     return try migrator.appliedMigrations(db)
