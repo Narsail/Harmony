@@ -11,23 +11,23 @@ public final class CKRecordEncoder {
     self.zoneID = zoneID
   }
 
-    public func encode<E: HRecord>(_ value: E) throws -> CKRecord {
-      let type = E.recordType
-      let recordName = value.recordID.recordName
+  public func encode<E: HRecord>(_ value: E) throws -> CKRecord {
+    let type = E.recordType
+    let recordName = value.recordID.recordName
 
-        let encoder = _CKRecordEncoder(
-          recordTypeName: type,
-          recordName: recordName,
-          zoneID: zoneID
-        )
+      let encoder = _CKRecordEncoder(
+        recordTypeName: type,
+        recordName: recordName,
+        zoneID: zoneID
+      )
 
-        try value.encode(to: encoder)
+      try value.encode(to: encoder)
 
-        let record = encoder.buildRecord()
+      let record = encoder.buildRecord()
 
-        try validateSize(for: encoder.storage.keys)
+      try validateSize(for: encoder.storage.keys)
 
-        return record
+      return record
   }
 
   public static func decodeSystemFields(with systemFields: Data) -> CKRecord? {
