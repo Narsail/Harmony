@@ -223,8 +223,7 @@ extension Harmonic: CKSyncEngineDelegate {
                 // Find this in our DB
                 if let modelType = modelType(for: recordType),
                    let record = try? await database.read({ db in
-                        let uuid = UUID(uuidString: internalID)
-                        return try modelType.fetchOne(db, key: uuid)
+                        return try modelType.fetchOne(db, key: internalID)
                 }) {
                     return record.record
                 } else {
@@ -283,7 +282,7 @@ private extension Harmonic {
             if let id = record.recordID.parsedRecordID,
                let modelType = modelType(for: record) {
                 try! database.write { db in
-                    if var localRecord = try modelType.fetchOne(db, key: UUID(uuidString: id)) {
+                    if var localRecord = try modelType.fetchOne(db, key: id) {
                         try localRecord.updateChanges(db: db, ckRecord: record)
                     } else {
                         if let model = modelType.parseFrom(record: record) {
@@ -303,7 +302,7 @@ private extension Harmonic {
                let modelType = modelType(for: recordType) {
                 // Find it locally and merge it
                 _ = try! database.write { db in
-                    try modelType.deleteOne(db, key: UUID(uuidString: id))
+                    try modelType.deleteOne(db, key: id)
                 }
             }
         }
@@ -326,7 +325,7 @@ private extension Harmonic {
             if let id = savedRecord.recordID.parsedRecordID,
                let modelType = modelType(for: savedRecord) {
                 try! database.write { db in
-                    var localRecord = try? modelType.fetchOne(db, key: UUID(uuidString: id))
+                    var localRecord = try? modelType.fetchOne(db, key: id)
                     localRecord?.setLastKnownRecordIfNewer(savedRecord)
                     try! localRecord?.save(db)
                 }
@@ -353,7 +352,7 @@ private extension Harmonic {
                 }
 
                 try? database.write { db in
-                    var localRecord = try modelType.fetchOne(db, key: UUID(uuidString: id))
+                    var localRecord = try modelType.fetchOne(db, key: id)
                     // Merge from server...
                     try localRecord?.updateChanges(db: db, ckRecord: serverRecord)
                 }
@@ -389,7 +388,7 @@ private extension Harmonic {
 
             if shouldClearServerRecord {
                 try? database.write { db in
-                    var localRecord = try? modelType.fetchOne(db, key: UUID(uuidString: id))
+                    var localRecord = try? modelType.fetchOne(db, key: id)
                     // Merge from server...
                     localRecord?.archivedRecord = nil
                     try localRecord?.save(db)
